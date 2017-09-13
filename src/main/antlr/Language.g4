@@ -102,8 +102,11 @@ declaration
 
 declarationModule
     :   declarationModuleAttribute*
-        declarationModuleSignature
-        declarationModuleContents
+        MODULE name
+        typeGuards?
+        CURLY_OPEN
+        declaration*
+        CURLY_CLOSE
     ;
 
 declarationModuleAttribute
@@ -114,23 +117,16 @@ declarationModuleAttribute
     |   PURE
     ;
 
-declarationModuleSignature
-    :   MODULE name
-        typeGuards?
-    ;
-
-declarationModuleContents
-    :   CURLY_OPEN
-        declaration*
-        CURLY_CLOSE
-    ;
-
 /*  Class declaration */
 
 declarationClass
     :   declarationClassAttribute*
-        declarationClassSignature
-        declarationClassContents
+        CLASS name
+        genericParameters?
+        typeGuards?
+        CURLY_OPEN
+        declarationClassMember*
+        CURLY_CLOSE
     ;
 
 declarationClassAttribute
@@ -141,18 +137,6 @@ declarationClassAttribute
     |   PURE
     |   MUTABLE
     |   IMMUTABLE
-    ;
-
-declarationClassSignature
-    :   CLASS name
-        genericParameters?
-        typeGuards?
-    ;
-
-declarationClassContents
-    :   CURLY_OPEN
-        declarationClassMember*
-        CURLY_CLOSE
     ;
 
 declarationClassMember
@@ -169,8 +153,12 @@ declarationClassMember
 
 declarationInterface
     :   declarationInterfaceAttribute*
-        declarationInterfaceSignature
-        declarationInterfaceContents
+        INTERFACE name
+        genericParameters?
+        typeGuards?
+        CURLY_OPEN
+        declarationInterfaceMember*
+        CURLY_CLOSE
     ;
 
 declarationInterfaceAttribute
@@ -181,18 +169,6 @@ declarationInterfaceAttribute
     |   PURE
     |   MUTABLE
     |   IMMUTABLE
-    ;
-
-declarationInterfaceSignature
-    :   INTERFACE name
-        genericParameters?
-        typeGuards?
-    ;
-
-declarationInterfaceContents
-    :   CURLY_OPEN
-        declarationInterfaceMember*
-        CURLY_CLOSE
     ;
 
 declarationInterfaceMember
@@ -206,8 +182,12 @@ declarationInterfaceMember
 
 declarationTrait
     :   declarationTraitAttribute*
-        declarationTraitSignature
-        declarationTraitContents
+        TRAIT name
+        genericParameters?
+        typeGuards?
+        CURLY_OPEN
+        declarationTraitMember*
+        CURLY_CLOSE
     ;
 
 declarationTraitAttribute
@@ -218,18 +198,6 @@ declarationTraitAttribute
     |   PURE
     |   MUTABLE
     |   IMMUTABLE
-    ;
-
-declarationTraitSignature
-    :   TRAIT name
-        genericParameters?
-        typeGuards?
-    ;
-
-declarationTraitContents
-    :   CURLY_OPEN
-        declarationTraitMember*
-        CURLY_CLOSE
     ;
 
 declarationTraitMember
@@ -244,8 +212,13 @@ declarationTraitMember
 
 declarationEnumeration
     :   declarationEnumerationAttribute*
-        declarationEnumerationSignature
-        declarationEnumerationContents
+        ENUMERATION name
+        typeGuard?
+        genericParameters?
+        typeGuards?
+        CURLY_OPEN
+        declarationEnumerationMember*
+        CURLY_CLOSE
     ;
 
 declarationEnumerationAttribute
@@ -256,19 +229,6 @@ declarationEnumerationAttribute
     |   PURE
     |   MUTABLE
     |   IMMUTABLE
-    ;
-
-declarationEnumerationSignature
-    :   ENUMERATION name
-        typeGuard?
-        genericParameters?
-        typeGuards?
-    ;
-
-declarationEnumerationContents
-    :   CURLY_OPEN
-        declarationEnumerationMember*
-        CURLY_CLOSE
     ;
 
 declarationEnumerationMember
@@ -291,8 +251,12 @@ declarationEnumerationConstant
 
 declarationStructure
     :   declarationStructureAttribute*
-        declarationStructureSignature
-        declarationStructureContents
+        STRUCTURE name
+        genericParameters?
+        typeGuards?
+        CURLY_OPEN
+        declarationStructureMember*
+        CURLY_CLOSE
     ;
 
 declarationStructureAttribute
@@ -300,18 +264,6 @@ declarationStructureAttribute
     |   PRIVATE
     |   PROTECTED
     |   FINAL
-    ;
-
-declarationStructureSignature
-    :   STRUCTURE name
-        genericParameters?
-        typeGuards?
-    ;
-
-declarationStructureContents
-    :   CURLY_OPEN
-        declarationStructureMember*
-        CURLY_CLOSE
     ;
 
 declarationStructureMember
@@ -324,15 +276,11 @@ declarationStructureMember
 
 declarationFunction
     :   declarationFunctionAttribute*
-        declarationFunctionSignature
-        declarationFunctionContents
-    ;
-
-declarationFunctionSignature
-    :   FUNCTION name
+        FUNCTION name
         genericParameters?
         parameters?
         typeGuard?
+        declarationFunctionContents
     ;
 
 declarationFunctionAttribute
@@ -355,8 +303,9 @@ declarationFunctionContents
 
 declarationConstant
     :   declarationConstantAttribute*
-        declarationConstantSignature
-        declarationConstantValue?
+        CONSTANT name
+        typeGuard?
+        (ASSIGN expression)?
         SEMICOLON
     ;
 
@@ -366,20 +315,13 @@ declarationConstantAttribute
     |   PROTECTED
     ;
 
-declarationConstantSignature
-    :   CONSTANT name typeGuard?
-    ;
-
-declarationConstantValue
-    :   ASSIGN expression
-    ;
-
 /* Variable declaration */
 
 declarationVariable
     :   declarationVariableAttribute*
-        declarationVariableSignature
-        declarationVariableValue?
+        VARIABLE name
+        typeGuard?
+        (ASSIGN expression)?
     ;
 
 declarationVariableAttribute
@@ -389,20 +331,13 @@ declarationVariableAttribute
     |   FINAL
     ;
 
-declarationVariableSignature
-    :   VARIABLE name typeGuard?
-    ;
-
-declarationVariableValue
-    :   ASSIGN expression
-    ;
-
 /* Custom type declaration */
 
 declarationType
     :   declarationTypeAttribute*
-        declarationTypeSignature
-        declarationTypeContents
+        TYPE name
+        genericParameters?
+        ASSIGN type
         SEMICOLON
     ;
 
@@ -413,23 +348,22 @@ declarationTypeAttribute
     |   FINAL
     ;
 
-declarationTypeSignature
-    :   TYPE name genericParameters?
-    ;
-
-declarationTypeContents
-    :   ASSIGN type
-    ;
-
 /* Test declaration */
 
 declarationTest
-    :   declarationTestSignature
+    :   declarationTestAttribute
+        TEST name
         declarationTestContents
     ;
 
-declarationTestSignature
-    :   TEST name
+declarationTestAttribute
+    :   PUBLIC
+    |   PRIVATE
+    |   PROTECTED
+    |   PURE
+    |   FINAL
+    |   INLINE
+    |   UNSAFE
     ;
 
 declarationTestContents
@@ -456,7 +390,10 @@ declarationExtension
 
 declarationMethod
     :   declarationMethodAttribute*
-        declarationMethodSignature
+        IDENTIFIER
+        genericParameters?
+        parameters
+        typeGuard?
         declarationMethodContents
     ;
 
@@ -470,13 +407,6 @@ declarationMethodAttribute
     |   UNSAFE
     ;
 
-declarationMethodSignature
-    :   IDENTIFIER
-        genericParameters?
-        parameters
-        typeGuard?
-    ;
-
 declarationMethodContents
     :   codeConditional
     |   codeStatement
@@ -487,7 +417,9 @@ declarationMethodContents
 
 declarationConstructor
     :   declarationConstructorAttribute*
-        declarationConstructorSignature
+        CONSTRUCTOR
+        genericParameters?
+        parameters
         declarationConstructorContents
     ;
 
@@ -500,12 +432,6 @@ declarationConstructorAttribute
     |   IMMUTABLE
     ;
 
-declarationConstructorSignature
-    :   CONSTRUCTOR
-        genericParameters?
-        parameters
-    ;
-
 declarationConstructorContents
     :   codeConditional
     |   codeStatement
@@ -516,10 +442,9 @@ declarationConstructorContents
 
 declarationField
     :   declarationFieldAttribute*
-        declarationFieldSignature
-        declarationFieldContents?
-        declarationFieldProperties?
-        SEMICOLON?
+        IDENTIFIER typeGuard?
+        (ASSIGN expression)?
+        declarationFieldProperties
     ;
 
 declarationFieldAttribute
@@ -533,23 +458,16 @@ declarationFieldAttribute
     |   IMMUTABLE
     ;
 
-declarationFieldSignature
-    :   IDENTIFIER typeGuard?
-    ;
-
-declarationFieldContents
-    :   ASSIGN expression
-    ;
-
 declarationFieldProperties
-    :   CURLY_OPEN
+    :   (CURLY_OPEN
         declarationFieldProperty*
-        CURLY_CLOSE
+        CURLY_CLOSE)
+    |   SEMICOLON
     ;
 
 declarationFieldProperty
     :   declarationPropertyAttribute*
-        declarationPropertyType
+        (GET|SET)
         declarationFieldPropertyContents
     ;
 
@@ -563,7 +481,9 @@ declarationFieldPropertyContents
 
 declarationProperty
     :   declarationPropertyAttribute*
-        declarationPropertySignature
+        (GET|SET)
+        IDENTIFIER
+        typeGuard
         declarationPropertyContents
     ;
 
@@ -578,17 +498,6 @@ declarationPropertyAttribute
     |   UNSAFE
     ;
 
-declarationPropertySignature
-    :   declarationPropertyType
-        IDENTIFIER
-        typeGuard
-    ;
-
-declarationPropertyType
-    :   GET
-    |   SET
-    ;
-
 declarationPropertyContents
     :   codeConditional
     |   codeBlockOrStatement
@@ -599,13 +508,8 @@ declarationPropertyContents
 
 declarationInvariant
     :   declarationInvariantAttribute*
-        declarationInvariantSignature
+        INVARIANT IDENTIFIER
         declarationInvariantContents
-    ;
-
-declarationInvariantSignature
-    :   INVARIANT
-        IDENTIFIER
     ;
 
 declarationInvariantContents
@@ -622,7 +526,7 @@ declarationInvariantAttribute
 
 declarationDelegator
     :   declarationDelegatorAttribute*
-        declarationDelegatorSignature
+        DELEGATE SELF declarationDelegatorElement+ (AS IDENTIFIER)?
         SEMICOLON
     ;
 
@@ -634,33 +538,21 @@ declarationDelegatorAttribute
     |   IMMUTABLE
     ;
 
-declarationDelegatorSignature
-    :   DELEGATE
-        SELF declarationDelegatorElement+
-        declarationDelegatorName?
-    ;
-
 declarationDelegatorElement
     :   expressionAccessArray
     |   expressionAccessMethod
     |   expressionAccessProperty
     ;
 
-declarationDelegatorName
-    :   AS IDENTIFIER
-    ;
-
 /* Conditional declaration */
 
 declarationPrecondition
-    :   REQUIRE
-        IDENTIFIER
+    :   REQUIRE IDENTIFIER
         codeBlockOrStatement
     ;
 
 declarationPostcondition
-    :   ENSURE
-        IDENTIFIER
+    :   ENSURE IDENTIFIER
         codeBlockOrStatement
     ;
 
@@ -1409,7 +1301,11 @@ expressionObject
         expressionObjectName
         genericArguments?
         arguments?
-        declarationClassContents?
+        (
+            CURLY_OPEN
+            declarationClassMember
+            CURLY_CLOSE
+        )?
     ;
 
 expressionObjectName
