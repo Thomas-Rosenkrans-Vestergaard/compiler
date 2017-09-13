@@ -1,0 +1,25 @@
+apply plugin: 'java'
+apply plugin: 'antlr'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    files('build/generated-src/antlr/main')
+    compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.1'
+    compile group: 'org.antlr', name: 'antlr4', version: '4.7'
+    antlr 'org.antlr:antlr4:4.7'
+}
+
+generateGrammarSource {
+    outputDirectory = new File('build/generated-src/antlr/main/tvestergaard/compiler/antlr')
+    maxHeapSize = "64m"
+    arguments += ["-visitor", "-long-messages"]
+}
+
+clean {
+    delete 'generated-src'
+}

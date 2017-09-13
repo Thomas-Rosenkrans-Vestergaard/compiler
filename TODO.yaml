@@ -1,0 +1,7 @@
+
+Semantic analysis:
+    - Uniform Function Call Syntax
+    - Tuple argument call:
+        - Given argument ('string, 'Date)
+        - Give to procedure with parameter ('string, 'Date)
+        - Else give to procedure with parameter 'string, 'Date
